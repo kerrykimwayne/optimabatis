@@ -36,15 +36,16 @@ export default function ClientsList() {
     const handleHide = () => {
         setShow(false)
     }
-    const handeDelete = () => {
-        Axioss.delete(`immobilierpannehelper/usermodif/${idDelete}/`).then(response => {
+    const handeDelete = (id) => {
+        console.log(id)
+        Axioss.delete(`immobilierpannehelper/usermodif/${id}/`).then(response => {
             toast.success('utilisateur supprimer', { duration: 2000 })
             handleHide()
         }).catch((error) => {
             toast.error(error.message, { duration: 2000 })
         })
     }
-    const totalPages = client ? Math.ceil(client.count / 7) : 1
+    const totalPages = client ? Math.ceil(client.count / 10) : 1
     return (
         <GeneraleView>
             <Modal show={show} onHide={handleHide}>
@@ -57,7 +58,7 @@ export default function ClientsList() {
                     Etes vous sur de vouloir supprimer cet utilisateur ?
                     <Stack flexDirection={'row'} gap={'15px'}>
                         <Button variant='contained' style={{ backgroundColor: 'indigo' }} onClick={() => setShow(false)}>annuler</Button>
-                        <Button variant='contained' style={{ backgroundColor: 'red' }} onClick={handeDelete}>Confirmer</Button>
+                        <Button variant='contained' style={{ backgroundColor: 'red' }} onClick={() => handeDelete(idDelete)}>Confirmer</Button>
                     </Stack>
                 </Modal.Body>
             </Modal>
@@ -75,7 +76,7 @@ export default function ClientsList() {
                                 <div className='col-3' style={{ fontWeight: 'bold' }}>Email</div>
                                 <div className='col-1' style={{ fontWeight: 'bold' }}>Action</div>
                             </div>
-                            {client.results.map((item, id) => (
+                            {client.results.filter(index => index.is_staff == false).map((item, id) => (
                                 <div key={id} style={{ width: '100%', display: 'flex', marginBottom: '15px', padding: '5px', alignItems: 'center', borderRadius: '10px', border: '1px solid gray' }} className='row'>
                                     <div className='col-1' style={{ color: 'black' }}>{id}</div>
                                     <div className='col-1'>{item.photo ? <Avatar src={item.photo} /> : <Avatar>{<AccountBox />}</Avatar>}</div>
@@ -88,7 +89,7 @@ export default function ClientsList() {
                         </div>
                     </Stack>
                 )}
-                <Stack position={'absolute'} bottom={'10px'} justifyContent={'center'} alignItems={'center'} width={'100%'}>
+                <Stack justifyContent={'center'} alignItems={'center'} width={'100%'}>
                     {client && <Pagin data={client} setPage={setPage} page={page} totalPages={totalPages} />}
                 </Stack>
             </Stack>

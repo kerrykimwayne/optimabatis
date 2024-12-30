@@ -31,7 +31,7 @@ export default function App() {
   }, [token])
   const location = useLocation()
   return (
-    <Stack style={{ width: '100vw', height: '100vh' }}>
+    <Stack style={{ width: '100vw', height: '100vh', position: 'fixed', top: 0 }}>
       <Toaster />
       {token && <Header1 />}
       <AnimatePresence mode='wait'>

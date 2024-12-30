@@ -45,7 +45,6 @@ export default function Publiciter() {
             toast.error(error.message, { duration: 2000 })
         })
     }
-    console.log(datapub)
 
     const totalPages = datapub ? Math.ceil(datapub.count / 2) : 1
     return (
@@ -64,11 +63,11 @@ export default function Publiciter() {
                     </Stack>
                 </Modal.Body>
             </Modal>
-            <Stack style={{ width: '100%', height: '35%', borderRadius: '10px' }} className='bg-info' justifyContent={'space-between'}
+            <Stack style={{ width: '100%', height: '35%', borderRadius: '10px', backgroundColor: '#E0F7FA' }} justifyContent={'space-between'}
                 alignItems={'center'} flexDirection={'row'}>
                 <Stack style={{ gap: '10px', padding: '10px', height: '100%' }}>
-                    <Typography variant='h5' fontWeight={'bold'}>Créez une annonces</Typography>
-                    <AnnoceForm label={'Créez une annonce'} />
+                    <Typography variant='h5' fontWeight={'bold'}>Créez une Publicité</Typography>
+                    <AnnoceForm label={'Créez une Publicité'} />
                 </Stack>
             </Stack>
             <Stack style={{ width: '100%', height: '63%', borderRadius: '10px' }} className='bg-tertiary' alignItems={'center'} flexDirection={'row'} gap={'10px'} >

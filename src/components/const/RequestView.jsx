@@ -4,17 +4,34 @@ import React from 'react'
 import { Image, Stack } from 'react-bootstrap'
 import Chargement from '../Chargement'
 import Axioss from '../../config/api'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 
 export default function RequestView({ handleHide, show, user }) {
-    const annulerinstance = (id) => {
-        Axioss.patch(`immobilierpannehelper/intervention/${id}/`, { "actif": "annuler" }).then(response => {
+    const queryClient = useQueryClient()
+    const mutation = useMutation({
+        mutationFn: (id) => Axioss.patch(`immobilierpannehelper/intervention/${id}/`, { "actif": "annuler" }).then(response => {
             handleHide()
-        })
+        }),
+        onSuccess: () => {
+            queryClient.invalidateQueries('intervention')
+            toast.success('intervention annuler', { duration: 2000 })
+        }
+    })
+    const interventionterminer = useMutation({
+        mutationFn: (id) => Axioss.patch(`immobilierpannehelper/intervention/${id}/`, { "actif": "terminer" }).then(response => {
+            handleHide()
+        }),
+        onSuccess: () => {
+            queryClient.invalidateQueries('intervention')
+            toast.success('intervention terminer', { duration: 2000 })
+        }
+    })
+    const annulerinstance = (id) => {
+        mutation.mutate(id)
     }
     const terminerinstance = (id) => {
-        Axioss.patch(`immobilierpannehelper/intervention/${id}/`, { "actif": "terminer" }).then(response => {
-            handleHide()
-        })
+        interventionterminer.mutate(id)
     }
     console.log(user)
     return (

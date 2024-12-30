@@ -47,33 +47,12 @@ export default function Messages() {
     const readMessage = (message) => {
         const formData = new FormData()
         formData.append("is_read", true)
-        Axioss.patch(`immobilierpannehelper/discussion/${message.createur_info.id}/`, formData).then(response => {
-            navigator(`/message/${message.createur_info.id}`, { state: { user: message } })
+        Axioss.patch(`immobilierpannehelper/discussion/${message.receiver}/`, formData).then(response => {
+            navigator(`/message/${message.receiver}`, { state: { user: message } })
         }).catch(err => err.message)
     }
 
 
-    useEffect(() => {
-        const red = () => {
-            const redx = mes ? mes.reduce((objet, index) => {
-                const indess = objet.findIndex(res => (res.sender == index.sender && res.receiver == index.receiver) || (res.receiver == index.sender && res.sender == index.receiver))
-                if (indess !== -1) {
-                    const compare1 = convertdate(index.created_at)
-                    const compare2 = convertdate(objet[indess].created_at)
-                    if (compare1 > compare2) {
-                        objet[indess] = index
-                    }
-
-                }
-                else {
-                    objet.push(index)
-                }
-                return objet
-            }, []) : []
-            setReduceData(redx)
-        }
-        red()
-    }, [mes])
     console.log(reducedata)
     return (
         <GeneraleView>
@@ -81,15 +60,36 @@ export default function Messages() {
             <Typography variant='h4'>Listes des Messages </Typography>
             <Stack style={{ width: '100%', height: '100%', borderRadius: '10px', position: 'relative' }}>
                 {isloadmes && <Chargement />}
-                {reducedata && reducedata.map((user) => (
+                {mes && mes.reduce((objet, index) => {
+                    const indess = objet.findIndex(res => (res.sender == index.sender && res.receiver == index.receiver) || (res.receiver == index.sender && res.sender == index.receiver))
+                    if (indess !== -1) {
+                        const compare1 = convertdate(index.created_at)
+                        const compare2 = convertdate(objet[indess].created_at)
+                        if (compare1 < compare2) {
+                            objet[index] = index
+                        }
+
+                    }
+                    else {
+                        if (index.sender == users.id || index.receiver == users.id) {
+                            objet.push(index)
+                        }
+                    }
+                    return objet
+                }, []).map((user) => (
                     <Stack key={user.id} style={{ marginBottom: '20px' }} onClick={() => readMessage(user)}>
                         <Stack style={{
                             boxShadow: '0px 0px 2px 2px rgba(0,0,0,0.2)', borderRadius: '25px', padding: '10px', cursor: 'pointer', flexDirection: 'row', alignItems: 'center', gap: '5px'
                         }}>
                             {user.createur_info.photo ? <Avatar src={user.createur_info.photo} sizes='50px' /> : <Avatar sizes='50px' style={{ backgroundColor: colors.indigo['A200'] }}></Avatar>}
-                            {user.content && !user.image && <Typography fontWeight={!user.is_read && 'bold'}>{user.content}</Typography>}
-                            {user.content && user.image && <Typography fontWeight={!user.is_read && 'bold'}>{user.content} (image joint)</Typography>}
-                            {!user.content && user.image && <Typography fontWeight={!user.is_read && 'bold'}> (image joint)</Typography>}
+                            <Stack style={{
+                                alignItems: 'flex-start', gap: '5px'
+                            }}>
+                                <Typography fontWeight={'bold'}>{user.createur_info.username}</Typography>
+                                {user.content && !user.image && <Typography fontWeight={!user.is_read && 'bold'}>{user.content}</Typography>}
+                                {user.content && user.image && <Typography fontWeight={!user.is_read && 'bold'}>{user.content} (image joint)</Typography>}
+                                {!user.content && user.image && <Typography fontWeight={!user.is_read && 'bold'}> (image joint)</Typography>}
+                            </Stack>
                         </Stack>
 
                     </Stack>

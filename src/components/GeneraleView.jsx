@@ -20,8 +20,9 @@ export default function GeneraleView({ children }) {
         <Stack sx={{ width: '100%', height: '100%', flexDirection: 'row', backgroundColor: Style.backGroundDark }} >
             <Headers />
             <Stack style={{ width: '100%', height: '97%', backgroundColor: 'white', borderRadius: '10px', flexDirection: 'row' }}>
-                <Stack style={{ width: '100%', height: '100%', padding: '15px', gap: '15px' }} >
+                <Stack style={{ width: '100%', height: '100%', padding: '10px', gap: '15px', overflow: 'scroll' }} >
                     {children}
+
                 </Stack>
             </Stack>
         </Stack>

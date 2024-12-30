@@ -1,5 +1,5 @@
 export const Style = {
     primary: '#051A2D',
-    backGroundDark: '#0D0745',
+    backGroundDark: '#1A1A1A',
     backGroundLight: '#FFFFFF'
 }

@@ -47,7 +47,7 @@ export default function AnnoceForm({ handleHide, show, label }) {
                 <input accept='image/*' size='small' name='image'{...annoneregister('image', { required: true })} type='file' />
             </Box>
             <Box width={'80%'} gap={3} >
-                <Button type='submit' variant='contained' style={{ backgroundColor: 'indigo' }} >{load ? <Chargement /> : 'label'}</Button>
+                <Button type='submit' variant='contained' style={{ backgroundColor: '#007BFF' }} >{load ? <Chargement /> : label}</Button>
             </Box>
         </form>
     )
